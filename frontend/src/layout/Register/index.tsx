@@ -51,10 +51,9 @@ const Register = () => {
                                         nav("/login",{ state: { data: jsonData } })
                                     }
                                 ).catch(
-                                    e => {
-                                        let data=e.response.data
-                                        let details=data.title+data.detail
-                                        alert(details)
+                                    error => {
+                                        const detail=error.response.data.title+error.response.data.detail
+                                        alert(detail)
                                     }
                                 )
                             }

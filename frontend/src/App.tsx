@@ -1,3 +1,5 @@
+// @ts-ignore
+
 import React, {useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -13,6 +15,7 @@ import { Header } from 'antd/es/layout/layout';
 import Register from "./layout/Register";
 import EditArtwork from "./layout/EditArtwork";
 import ShowArtwork from "./layout/ShowArtwork";
+import UserArtwork from "./layout/UserArtwork";
 
 //interface——类似于data class
 //类似于c++的struct和class
@@ -50,6 +53,10 @@ function App() {
             path: "show/artwork/:aid",
             element: <ShowArtwork/>,
         },
+        {
+            path: "s/artwork/user",
+            element: <UserArtwork/>
+        }
     ]);
     return <div>
         <RouterProvider router={router} />

@@ -1,12 +1,24 @@
 import {Menu} from "antd";
 import {Header} from "antd/es/layout/layout";
-import React from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
+interface ArtworkDto {
+    id: number
+    atitle:string
+    title: string
+    avatar: string
+    intro: string
+    ip: string
+    kind: string
+    resourceAddress:string
+    userName:string
+}
+
 const MyHeader = ()=>{
     const navigate = useNavigate()
-
+    const [artwork,setArtwork]=useState<ArtworkDto[]>()
     return <Header>
         {/*<div style={{float:'left',color:'white'}} >用户名</div>*/}
         <Menu
@@ -43,22 +55,21 @@ const MyHeader = ()=>{
                 {
                     label:'个人上传',
                     key:'4',
-                    onClick:()=>{ 
+                    onClick: ()=>{
                         axios.get(`/artwork/user?username=${localStorage.getItem('username')}`).
                         then(e=>{
-                            navigate(`/s/artwork?name=all&category=${localStorage.getItem("username")}`);
+                            setArtwork(e.data)
+                            let objectArray=JSON.stringify(artwork)
+                            // 写一个用户界面，链接在下面了
+                            // navigate(`/s/artwork/user?category=${localStorage.getItem("username")}`,
+                            //     { state: { data: objectArray } });
 
                         }).catch(error=> {
-                                console.log("error")
+                                console.log('获取个人上传失败')
                             }
                         )
                     }
                 },
-                // {
-                //     label:'删除',
-                //     key:'5',
-                //
-                // }
             ]}
         />
     </Header>

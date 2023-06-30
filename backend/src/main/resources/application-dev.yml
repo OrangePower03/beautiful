@@ -3,4 +3,4 @@ our:
 
 user:
   image:
-    url: C:\\Users\\Administrator\\Desktop\\project\\java\\userImages\\
+    url: backend/src/main/resources/static/userImages

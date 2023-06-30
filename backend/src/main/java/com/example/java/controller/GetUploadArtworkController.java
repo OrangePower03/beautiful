@@ -7,6 +7,7 @@ import com.example.java.mapper.AddArtworkMapper;
 import com.example.java.mapper.GetArtworkMapper;
 import com.example.java.mapper.UserMapper;
 import com.example.java.myExcetion.AddArtworkException;
+import com.example.java.myExcetion.ErrorRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -27,90 +28,13 @@ public class GetUploadArtworkController {
     @Autowired
     private UserMapper userMapper;
 
-    // 通过aid们找所有的作品
-    private List<GetArtworkDto> findByAids(List<Integer> aids){
-        List<GetArtworkDto> artworks=new ArrayList<>(0);
-        for(Integer aid:aids){
-            artworks.addAll(getArtworkMapper.findArtworkByAid(aid));
-        }
-        for(GetArtworkDto artwork:artworks){
-            artwork.userName=getArtworkMapper.findUserNameByAid(artwork.id);
-            artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
-            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
-            artwork.kind=getArtworkMapper.findKindNameByKid(artwork.kid);
-        }
-        return artworks;
-    }
-
-    // 通过搜索职工找所有的作品
-    private List<GetArtworkDto> findByStaff(String search){
-        List<GetArtworkDto> artworks=new ArrayList<>(0);
-        List<Integer> celebritiesId = getArtworkMapper.findAllCidLikeSearch(search);
-        List<Integer> aids=new ArrayList<>();
-        for(Integer cid:celebritiesId){
-            aids.addAll(getArtworkMapper.findAidByCid(cid));
-        }
-        artworks=findByAids(aids);
-        return artworks;
-    }
-
-    // 通过搜索类型的，找这个类型的所有作品
-    private List<GetArtworkDto> findByType(String search,String searchType){
-        List<GetArtworkDto> artworks=new ArrayList<>(0);
-        Integer kid = getArtworkMapper.findKidBySearchType(searchType);
-        List<Integer> allArtworkId = getArtworkMapper.findAllArtworkNameLikeSearch(search);
-        for(Integer aid:allArtworkId){
-            artworks.addAll(getArtworkMapper.findArtworkByA_Kid(aid,kid)) ;
-        }
-
-        for(GetArtworkDto artwork:artworks){
-            artwork.userName=getArtworkMapper.findUserNameByAid(artwork.id);
-            artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
-            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
-            artwork.kind=searchType;
-        }
-        return artworks;
-    }
-    private List<GetArtworkDto> findByIp(String search){
-        List<GetArtworkDto> artworks=new ArrayList<>(0);
-        List<Integer> ipIds = getArtworkMapper.findIpIdLikeIpName(search);
-        for(Integer ipId: ipIds){
-            artworks.addAll(getArtworkMapper.findAllArtworkByIpId(ipId));
-        }
-        for(GetArtworkDto artwork:artworks){
-            artwork.kind=getArtworkMapper.findKindNameByKid(artwork.kid);
-            artwork.userName=getArtworkMapper.findUserNameByAid(artwork.id);
-            artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
-            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
-        }
-        return artworks;
-    }
-
-    // 通过用户找作品
-    private List<GetArtworkDto> findByUser(String search,boolean findOne){
-        List<GetArtworkDto> artworks=new ArrayList<>(0);
-        List<Integer> uIds;
-        if(findOne){
-            uIds=getArtworkMapper.findUidByUserName(search);
-        }
-        else{
-            uIds=getArtworkMapper.findUidLikeUserName(search);
-        }
-
-        List<Integer> aids=new ArrayList<>(0);
-        for(Integer uid:uIds){
-            aids.addAll(getArtworkMapper.findAidByUid(uid));
-        }
-        artworks=findByAids(aids);
-        return artworks;
-    }
-
+    //等待前端
     @GetMapping("/artwork/user")
     public GetArtworkDto[] searchMyArtwork(@RequestParam("username") String name){
         System.out.println("searchMyArtwork开始运行");
         List<GetArtworkDto> artworkList = findByUser(name,true);
         GetArtworkDto[] artworks=new GetArtworkDto[artworkList.size()];
-        System.out.println(artworkList);
+        System.out.println(artworkList.size());
         return artworkList.toArray(artworks);
     }
 
@@ -118,8 +42,8 @@ public class GetUploadArtworkController {
     public GetArtworkDto[] searchArtworks(@RequestParam("name") String searchName,
                            @RequestParam("category") String searchType){
         System.out.println("searchArtworks开始运行");
-        if(searchName.isEmpty()){
-            System.out.println("用户提交空白数据");
+        if(searchName.isEmpty() || searchName.equals("_")){
+            throw new ErrorRequest("用户妄想穷尽数据库");
         }
         Set<GetArtworkDto> artworkSet=new HashSet<>(0);
         List<GetArtworkDto> artworkList=new ArrayList<>(0);
@@ -206,5 +130,83 @@ public class GetUploadArtworkController {
                 throw new AddArtworkException(UploadArtworkDto.ADD_AC_RELATION_ERROR);
             }
         }
+    }
+
+    // 通过aid们找所有的作品
+    private List<GetArtworkDto> findByAids(List<Integer> aids){
+        List<GetArtworkDto> artworks=new ArrayList<>(0);
+        for(Integer aid:aids){
+            artworks.addAll(getArtworkMapper.findArtworkByAid(aid));
+        }
+        for(GetArtworkDto artwork:artworks){
+            artwork.userName=getArtworkMapper.findUserNameByAid(artwork.id);
+            artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
+            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
+            artwork.kind=getArtworkMapper.findKindNameByKid(artwork.kid);
+        }
+        return artworks;
+    }
+
+    // 通过搜索职工找所有的作品
+    private List<GetArtworkDto> findByStaff(String search){
+        List<GetArtworkDto> artworks=new ArrayList<>(0);
+        List<Integer> celebritiesId = getArtworkMapper.findAllCidLikeSearch(search);
+        List<Integer> aids=new ArrayList<>();
+        for(Integer cid:celebritiesId){
+            aids.addAll(getArtworkMapper.findAidByCid(cid));
+        }
+        artworks=findByAids(aids);
+        return artworks;
+    }
+
+    // 通过搜索类型的，找这个类型的所有作品
+    private List<GetArtworkDto> findByType(String search,String searchType){
+        List<GetArtworkDto> artworks=new ArrayList<>(0);
+        Integer kid = getArtworkMapper.findKidBySearchType(searchType);
+        List<Integer> allArtworkId = getArtworkMapper.findAllArtworkNameLikeSearch(search);
+        for(Integer aid:allArtworkId){
+            artworks.addAll(getArtworkMapper.findArtworkByA_Kid(aid,kid)) ;
+        }
+
+        for(GetArtworkDto artwork:artworks){
+            artwork.userName=getArtworkMapper.findUserNameByAid(artwork.id);
+            artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
+            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
+            artwork.kind=searchType;
+        }
+        return artworks;
+    }
+    private List<GetArtworkDto> findByIp(String search){
+        List<GetArtworkDto> artworks=new ArrayList<>(0);
+        List<Integer> ipIds = getArtworkMapper.findIpIdLikeIpName(search);
+        for(Integer ipId: ipIds){
+            artworks.addAll(getArtworkMapper.findAllArtworkByIpId(ipId));
+        }
+        for(GetArtworkDto artwork:artworks){
+            artwork.kind=getArtworkMapper.findKindNameByKid(artwork.kid);
+            artwork.userName=getArtworkMapper.findUserNameByAid(artwork.id);
+            artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
+            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
+        }
+        return artworks;
+    }
+
+    // 通过用户找作品
+    private List<GetArtworkDto> findByUser(String search,boolean findOne){
+        List<GetArtworkDto> artworks=new ArrayList<>(0);
+        List<Integer> uIds;
+        if(findOne){
+            uIds=getArtworkMapper.findUidByUserName(search);
+        }
+        else{
+            uIds=getArtworkMapper.findUidLikeUserName(search);
+        }
+
+        List<Integer> aids=new ArrayList<>(0);
+        for(Integer uid:uIds){
+            aids.addAll(getArtworkMapper.findAidByUid(uid));
+        }
+        artworks=findByAids(aids);
+        return artworks;
     }
 }

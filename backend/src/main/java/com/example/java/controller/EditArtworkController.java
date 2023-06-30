@@ -8,6 +8,7 @@ import com.example.java.mapper.EditArtworkMapper;
 import com.example.java.mapper.GetArtworkMapper;
 import com.example.java.mapper.ShowArtworkMapper;
 import com.example.java.myExcetion.AddArtworkException;
+import com.example.java.myExcetion.EditArtworkException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -60,7 +61,7 @@ public class EditArtworkController {
         System.out.println("editArtwork开始运行");
         System.out.println(data);
         if(check.hasErrors()){
-            throw new AddArtworkException(UploadArtworkDto.INPUT_ERROR);
+            throw new AddArtworkException(UploadArtworkDto.INPUT_ERROR,check);
         }
         Integer aid=data.aid;
         // 找到原来的作品详情
@@ -78,6 +79,7 @@ public class EditArtworkController {
                 Integer ipId=editArtworkMapper.findIpIdByIpName(data.ip);
                 if(editArtworkMapper.updateArtworkIp(ipId,aid)<=0){
                     System.out.println("更新ip失败");
+                    throw new EditArtworkException(EditArtworkDto.UPDATE_IP_ERROR);
                 }
                 else {
                     System.out.println("更新ip成功");
@@ -89,6 +91,7 @@ public class EditArtworkController {
         if(!data.time.equals(artwork.time)){
             if(editArtworkMapper.updateArtworkTime(new Date(data.time*1000),aid)<=0){
                 System.out.println("更新时间失败");
+                throw new EditArtworkException(EditArtworkDto.UPDATE_TIME_ERROR);
             }
             else {
                 System.out.println("更新时间成功");
@@ -99,6 +102,7 @@ public class EditArtworkController {
         if(!data.resourceAddress.equals(artwork.resourceAddress)){
             if(editArtworkMapper.updateArtworkResourceAddress(data.resourceAddress,aid)<=0){
                 System.out.println("修改资源地址失败");
+                throw new EditArtworkException(EditArtworkDto.UPDATE_ADDRESS_ERROR);
             }
             else {
                 System.out.println("更新资源地址成功");
@@ -109,6 +113,7 @@ public class EditArtworkController {
         if(!data.avatar.equals(artwork.avatar)){
             if(editArtworkMapper.updateArtworkAvatar(data.avatar,aid)<=0){
                 System.out.println("修改作品图片地址失败");
+                throw new EditArtworkException(EditArtworkDto.UPDATE_AVATAR_ERROR);
             }
             else {
                 System.out.println("更新作品图片成功");
@@ -119,6 +124,7 @@ public class EditArtworkController {
         if(!data.intro.equals(artwork.intro)){
             if(editArtworkMapper.updateArtworkIntro(data.intro,aid)<=0){
                 System.out.println("修改作品简介失败");
+                throw new EditArtworkException(EditArtworkDto.UPDATE_INTRO_ERROR);
             }
             else {
                 System.out.println("更新作品简介成功");
@@ -129,6 +135,7 @@ public class EditArtworkController {
         if(!data.title.equals(artwork.title)){
             if(editArtworkMapper.updateArtworkName(data.title,aid)<=0){
                 System.out.println("修改作品名字失败");
+                throw new EditArtworkException(EditArtworkDto.UPDATE_NAME_ERROR);
             }
             else {
                 System.out.println("更新作品名字成功");
@@ -166,6 +173,7 @@ public class EditArtworkController {
 
             if(editArtworkMapper.removeArtworkWithCelebrity(aid,newAddCelebrity.getCid())<=0) {
                 System.out.println("删除作品和职工关系失败");
+                throw new EditArtworkException(EditArtworkDto.DELETE_ArtworkWithCelebrity_ERROR);
             }
             else {
                 System.out.println("删除作品和职工关系成功");

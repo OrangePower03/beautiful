@@ -1,4 +1,4 @@
-import {Link, useNavigate, useSearchParams} from "react-router-dom";
+import {Link, useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {Button, Card, Col, Row, Space, Image, Popconfirm} from "antd";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
@@ -18,12 +18,42 @@ const SearchArtworkResult = () => {
     const [artworkDtoList, setArtworkDtoList] = useState<ArtworkDto[]>([])
     //<>是泛型，ArtworkDto是一个泛型参数
 
+    // 这里明显是我在挣扎，不用看
+    // let jsonData = location.state?.data
+    // useEffect(() => {
+    //     try {
+    //       if (jsonData && jsonData.length > 0) {
+    //           console.log('到if里了')
+    //         // const artworkData = jsonData.map((item: ArtworkDto) => ({
+    //         //             id: item.id,
+    //         //             atitle: item.atitle,
+    //         //             title: item.title,
+    //         //             avatar: item.avatar,
+    //         //             intro: item.intro,
+    //         //             ip: item.ip,
+    //         //             kind: item.kind,
+    //         //             resourceAddress: item.resourceAddress,
+    //         //             userName: item.userName
+    //         //      }));
+    //         // console.log(artworkData.length)
+    //         // setArtworkDtoList(artworkData)
+    //       }
+    //     }
+    //     catch (error) {
+    //       console.error('JSON 解析错误:');
+    //     }
+    // }, [jsonData]);
+
     //useEffect函数被当作构造函数使用，第一个参数是一个函数，没有参数，第二个参数是一个数组
     useEffect(() => {
         //axios.get就是往后端发送一个get请求，请求的url就是你的第一个参数
-        axios.get(`http://localhost:8080/artwork?name=${searchParams.get("name")}&category=${searchParams.get("category")}`).then(e => {
+        axios.get(`http://localhost:8080/artwork?name=${searchParams.get("name")}&category=${searchParams.get("category")}`).
+        then(e => {
             setArtworkDtoList(e.data)//.then是异步请求的处理部分，就是等后端发来数据以后再做处理的部分，e.data返回的是一个哈希表数组2333，因为有可能返回多个结果
             //如果想要append要先创建一个变量，加完以后再全部赋值进去
+        }).catch(error=>{
+            const detail=error.response.data.title+'\n'+error.response.data.detail
+            alert(detail)
         })
     }, [searchParams])
 

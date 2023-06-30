@@ -8,6 +8,14 @@ import java.util.Date;
 
 @Component
 public class EditArtworkDto {
+    public static final String UPDATE_IP_ERROR="更新ip失败";
+    public static final String UPDATE_TIME_ERROR="更新时间失败";
+    public static final String UPDATE_ADDRESS_ERROR="更新资源地址失败";
+    public static final String UPDATE_AVATAR_ERROR="更新图片地址失败";
+    public static final String UPDATE_INTRO_ERROR="更新简介失败";
+    public static final String UPDATE_NAME_ERROR="更新作品名字失败";
+    public static final String DELETE_ArtworkWithCelebrity_ERROR="删除职工和作品关系失败";
+
     public Long time;
 
     @URL(message = "图像地址要是一个正确的地址")

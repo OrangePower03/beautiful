@@ -2,6 +2,7 @@ package com.example.java.exceptionController;
 
 import com.example.java.dto.UploadArtworkDto;
 import com.example.java.myExcetion.AddArtworkException;
+import com.example.java.myExcetion.ErrorRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -16,6 +17,17 @@ import java.util.List;
 public class HandleArtworkController {
     @Value("${our.email}")
     private String email;
+
+    @ExceptionHandler({ErrorRequest.class})
+    public ProblemDetail handleErrorRequestException(ErrorRequest e){
+        ProblemDetail detail=ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        String message=e.getMessage();
+        System.out.println(message);
+        detail.setTitle(message);
+        detail.setDetail("错误的输入，请确认你的输入");
+        detail.setInstance(URI.create("/edit/artwork"));
+        return detail;
+    }
 
     @ExceptionHandler({AddArtworkException.class})
     public ProblemDetail handleArtworkException(AddArtworkException e){
