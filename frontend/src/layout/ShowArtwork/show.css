@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+#container{
+    vertical-align: middle;
+    height: 100vh;
+    width: 100%;
+    display: inline-block;
+    position: relative;
+    overflow-x: hidden;
+}
+
+#container #mainShowBoard{
+    background-color: white;
+    margin-top: 3%;
+    margin-left: 20%;
+    margin-right: 20%;
+    height: auto;
+    width: auto;
+    opacity: 0.8;
+}
+
+#container #mainShow{
+    margin: 10%;
+}
+#container #name{
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 2%;
+    margin-top: 0.6%;
+}
+
+#container #photoAndIntro{
+
+}
+
+#container #ipAndKind{
+
+}
+
+#container #updateInfo{
+
+}
+
+#container #staffInfo{
+
+}
+
+#container #URLSource{
+
+}
+
+.titles{
+    font-size: 20px;
+}
+
+#intro{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+#container #searchBar{
+    width: 100%;
+    height: 6.5%;
+    top: 10%;
+    position: absolute;
+    margin-left: 10%;
+    transform: translateY(-50%);
+}
+
+#container .ant-input{
+    width: 70%;
+    height: 35px;
+    border-radius: 50px;
+}
+#container .ant-btn{
+    display:none;
+}
+
+/*导航栏*/
+#container #navigateBarContainer{   /*导航栏的容器，最大的*/
+    height: 6%;
+    display: flex;
+    background: rgba(0, 0, 0,0.9);
+}
+.navigateBar{   /*导航栏的容器，把五个按钮分成三个块*/
+    height: 100%;
+    width: 20%;
+}
+/*  d1 是第一个框，原来存放’搜索主页‘按钮的。d2，d3同理*/
+#d1{
+    margin-left: 2%;
+
+}
+#d2{
+    margin-left: 12%;
+    margin-right: 24%;
+}
+#d3{
+    margin-right: 2%;
+}
+
+.navigate{  /*所有按钮的类*/
+    background-color: transparent;
+    color: rgb(255,255,255);
+    border: none;
+    top: 100%;
+    transform: translateY(50%);
+    font-size: 20px;
+    transition: all 0.3s ease;
+}
+
+#b1{
+
+}
+#b2{
+    margin-right: 10%;
+}
+#b3{
+    margin-right: 10%;
+}
+#b4{
+
+}
+#b5{
+     margin-left:55%;
+}
+#b6{
+    margin-left:10%;
+}

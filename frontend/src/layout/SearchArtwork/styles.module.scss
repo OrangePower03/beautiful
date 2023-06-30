@@ -1,0 +1,85 @@
+//.container{
+//  vertical-align: middle;
+//  height: calc(100vh - 4rem);
+//  width: 100%;
+//  display: inline-block;
+//  position: relative;
+//  .searchBar{
+//
+//
+//    width: 50%;
+//    height: 6.5%;
+//    top: 50%;
+//    position: absolute;
+//    align-items: center;
+//    transform: translateY(-50%);
+//  }
+//}
+//
+//
+
+
+//.container {
+//  vertical-align: middle;
+//  height: calc(100vh - 4rem);
+//  width: 100%;
+//  display: inline-block;
+//  position: relative;
+//}
+//
+//.searchBar {
+//  width: 50%;
+//  height: 6.5%;
+//  position: absolute;
+//  top: 50%;
+//  left: 50%;
+//  transform: translate(-50%, -50%);
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//}
+
+//.container {
+//  vertical-align: middle;
+//  height: calc(100vh - 4rem);
+//  width: 100%;
+//  display: inline-block;
+//  position: relative;
+//}
+//
+//.searchBar {
+//  width: 50%; /* 修改这里以增加搜索框宽度 */
+//  height: 50%; /* 修改这里以增加搜索框高度 */
+//  position: absolute;
+//  top: 50%;
+//  left: 50%;
+//  transform: translate(-50%, -50%);
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//}
+
+.container {
+  vertical-align: middle;
+  height: calc(100vh - 4rem);
+  width: 100%;
+  display: inline-block;
+  position: relative;
+}
+
+.searchBar {
+  width: 50%;
+  height: 6.5%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+

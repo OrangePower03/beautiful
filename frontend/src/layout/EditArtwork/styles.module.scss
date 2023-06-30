@@ -1,0 +1,13 @@
+.container{
+    display: flex;
+    justify-content: center;
+    .form{
+        margin-top: 3rem;
+        width: 1000px;
+        .mylabel::after{
+            content: ":";
+            margin-inline-end: 8px;
+            margin-inline-start: 2px;
+        }
+    }
+}
