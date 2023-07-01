@@ -31,7 +31,7 @@ interface ArtworkEditDto {
     avatar: string
     resourceAddress: string
     celebritys: {
-        actid: number
+        // actid: number
         name: string
         title: number
         avatar: string
@@ -87,25 +87,16 @@ const AddArtwork = () => {
                     // wrapperCol={{ span: 16 }}
                     initialValues={artworkEditDto}
                     onFinish={(e) => {
-                        // const data = {
-                        //     ...artworkEditDto,
-                        //     intro: e.intro,
-                        //     kind: e.kind,
-                        //     title: e.title,
-                        //     users: artworkEditDto.users.map((ee, i) => ({
-                        //         ...ee,
-                        //         title: e.users[i].title,
-                        //         name: e.users[i].name,
-                        //     }))
-                        // }
-                        // console.log(e)
                         const data = {
                             ...e,
+                            actid: 0,
                             aid:artworkEditDto?.aid,
-                            time: e.time.unix()
-                        } as any
+                            time: e.time.unix(),
+                        } as ArtworkEditDto
+                        console.log(data)
                         axios.put('/artwork',data).
                            then(()=>{
+
                             message.success("修改成功！")
                             navigate(-1)
                         }).catch(e=>{
@@ -115,8 +106,9 @@ const AddArtwork = () => {
                     }}
                     className={styles.form}
 
-                    onFinishFailed={()=>{
-                            console.log('错误')
+                    onFinishFailed={(e)=>{
+                            const data={...e.values }as ArtworkEditDto
+                            console.log(data)
                         }
                     }
                     autoComplete="off"
@@ -197,18 +189,18 @@ const AddArtwork = () => {
                                         <Col span={16}>
                                             <Row gutter={[16, 16]}>
                                                 <Col span={8}>
-                                                    <Form.Item
-                                                        {...restField}
-                                                        name={[index, 'actid']}
-                                                        initialValue={(() => {
-                                                            const c = artworkEditDto?.celebritys[key]
-                                                            return c !== undefined ? c.actid : undefined;
-                                                        })()}
-                                                        style={{display:'none'}}
-                                                        rules={[{required: true}]}
-                                                    >
+                                                    {/*<Form.Item*/}
+                                                    {/*    {...restField}*/}
+                                                    {/*    name={[index, 'actid']}*/}
+                                                    {/*    initialValue={(() => {*/}
+                                                    {/*        const c = artworkEditDto?.celebritys[key]*/}
+                                                    {/*        return c !== undefined ? c.actid : undefined;*/}
+                                                    {/*    })()}*/}
+                                                    {/*    style={{display:'none'}}*/}
+                                                    {/*    rules={[{required: true}]}*/}
+                                                    {/*>*/}
 
-                                                    </Form.Item>
+                                                    {/*</Form.Item>*/}
                                                     <Form.Item
                                                         {...restField}
                                                         name={[index, 'name']}

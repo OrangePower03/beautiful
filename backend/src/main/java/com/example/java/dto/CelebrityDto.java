@@ -8,7 +8,7 @@ import java.util.Objects;
 @Component
 public class CelebrityDto {
     private Integer cid;
-    private Integer actid;
+    private Integer actid=null;
 
     public String name;
 

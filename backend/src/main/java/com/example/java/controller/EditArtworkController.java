@@ -64,8 +64,6 @@ public class EditArtworkController {
                 }
             }
         }
-
-
         return artwork;
     }
 
