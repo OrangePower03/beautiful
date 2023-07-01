@@ -24,8 +24,8 @@ public interface EditArtworkMapper {
     @Select("select cid_cid from artwork_celebrity_title where aid_aid=#{aid}")
     List<Integer> findCidByAid(Integer aid);
 
-    @Select("select tid_tid from artwork_celebrity_title where cid_cid=#{cid}")
-    Integer findTidByCid(Integer cid);
+    @Select("select tid_tid from artwork_celebrity_title where aid_aid=#{aid} and cid_cid=#{cid}")
+    List<Integer> findTidByCidAndAid(Integer aid,Integer cid);
 
     @Select("select ip_id from ip where name=#{name}")
     Integer findIpIdByIpName(String name);

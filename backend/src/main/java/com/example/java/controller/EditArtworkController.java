@@ -33,19 +33,39 @@ public class EditArtworkController {
     private AddArtworkMapper addArtworkMapper;
 
     private EditArtworkDto findArtworkByAid(Integer aid){
+        System.out.println("开始搜索作品");
         EditArtworkDto artwork = editArtworkMapper.findArtworkByAid(aid);
+//        System.out.println("找到这个作品了");
         artwork.time=artwork.date.getTime()/1000;
         artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
+//        System.out.println("找到这个ip了");
         List<Integer> cids=editArtworkMapper.findCidByAid(aid);
-        List<CelebrityDto> celebrityList=new ArrayList<>(0);
+
         for(Integer cid:cids){
-            celebrityList.add(showArtworkMapper.findMainMessageByCid(cid));
+            artwork.celebritys.add(showArtworkMapper.findMainMessageByCid(cid));
+//            System.out.println("找到这个职工了");
         }
-        for(CelebrityDto celebrity:celebrityList){
-            celebrity.title=editArtworkMapper.findTidByCid(celebrity.getCid());
+
+        // 通过cid和aid找这个作品的职工，但是存在一个人多个职位的
+        Set<Integer> handleCid=new TreeSet<>();
+//
+        for(int i=0;i<artwork.celebritys.size();i++){
+            if(!handleCid.contains(artwork.celebritys.get(i).getCid())){
+                List<Integer> tids = editArtworkMapper.findTidByCidAndAid(aid, artwork.celebritys.get(i).getCid());
+                handleCid.add(artwork.celebritys.get(i).getCid());
+                int tidIndex=tids.size();
+                artwork.celebritys.get(i).title=tids.get(0);
+                if(tidIndex>1){
+                    for(int j=artwork.celebritys.size()-1;j>i;j--){
+                        if(artwork.celebritys.get(j).name.equals(artwork.celebritys.get(i).name)){
+                            artwork.celebritys.get(j).title=tids.get(--tidIndex);
+                        }
+                    }
+                }
+            }
         }
-        artwork.celebritys=new CelebrityDto[celebrityList.size()];
-        celebrityList.toArray(artwork.celebritys);
+
+
         return artwork;
     }
 
@@ -145,8 +165,8 @@ public class EditArtworkController {
         // 取作品的新老职工集合
         HashSet<CelebrityDto> newCelebritySet=new HashSet<>(0);
         HashSet<CelebrityDto> oldCelebritySet=new HashSet<>(0);
-        newCelebritySet.addAll(Arrays.asList(data.celebritys));
-        oldCelebritySet.addAll(Arrays.asList(artwork.celebritys));
+        newCelebritySet.addAll(data.celebritys);
+        oldCelebritySet.addAll(artwork.celebritys);
 
         // 浅拷贝一个集合
         HashSet<CelebrityDto> cloneSet=new HashSet<>();

@@ -32,7 +32,6 @@ public class GetArtworkDto {
 
         if (!Objects.equals(id, that.id)) return false;
         if (!Objects.equals(atitle, that.atitle)) return false;
-        if (!Objects.equals(title, that.title)) return false;
         if (!Objects.equals(avatar, that.avatar)) return false;
         if (!Objects.equals(intro, that.intro)) return false;
         if (!Objects.equals(ip, that.ip)) return false;
@@ -48,7 +47,6 @@ public class GetArtworkDto {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (atitle != null ? atitle.hashCode() : 0);
-        result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (avatar != null ? avatar.hashCode() : 0);
         result = 31 * result + (intro != null ? intro.hashCode() : 0);
         result = 31 * result + (ip != null ? ip.hashCode() : 0);

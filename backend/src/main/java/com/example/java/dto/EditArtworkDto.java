@@ -3,8 +3,10 @@ package com.example.java.dto;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class EditArtworkDto {
@@ -34,7 +36,7 @@ public class EditArtworkDto {
 
     public String ip;
 
-    public CelebrityDto[] celebritys=new CelebrityDto[0];
+    public List<CelebrityDto> celebritys=new ArrayList<>(0);
 
     @Override
     public String toString() {
@@ -47,7 +49,7 @@ public class EditArtworkDto {
                 ", kind=" + kind +
                 ", title='" + title + '\'' +
                 ", ip='" + ip + '\'' +
-                ", celebritys=" + Arrays.toString(celebritys) +
+                ", celebritys=" + celebritys +
                 ", date=" + date +
                 ", ipId=" + ipId +
                 '}';

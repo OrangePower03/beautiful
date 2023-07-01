@@ -104,18 +104,21 @@ const AddArtwork = () => {
                             aid:artworkEditDto?.aid,
                             time: e.time.unix()
                         } as any
-                        axios.put('/artwork',data ,).
+                        axios.put('/artwork',data).
                            then(()=>{
                             message.success("修改成功！")
                             navigate(-1)
                         }).catch(e=>{
-                            message.error(e.response.data.title+e.response.data.detail)
-
+                            message.error(e.response.data.title+
+                                '\n'+e.response.data.detail)
                         })
                     }}
                     className={styles.form}
 
-                    // onFinishFailed={onFinishFailed}
+                    onFinishFailed={()=>{
+                            console.log('错误')
+                        }
+                    }
                     autoComplete="off"
                 >
                     <Form.Item

@@ -43,7 +43,9 @@ public class GetUploadArtworkController {
                            @RequestParam("category") String searchType){
         System.out.println("searchArtworks开始运行");
         if(searchName.isEmpty() || searchName.equals("_")){
-            throw new ErrorRequest("用户妄想穷尽数据库");
+            if(searchType.equals(GetArtworkDto.ALL)){
+                throw new ErrorRequest("用户妄想穷尽数据库");
+            }
         }
         Set<GetArtworkDto> artworkSet=new HashSet<>(0);
         List<GetArtworkDto> artworkList=new ArrayList<>(0);
@@ -120,10 +122,13 @@ public class GetUploadArtworkController {
         for (int i=0;i<celebrities.size();i++) {
             CelebrityDto celebrity=celebrities.get(i);
             List<Integer> celebrityId = addArtworkMapper.findCidByCelebrityName(celebrity.name);
-            if (celebrityId.isEmpty()) {
+            if(celebrityId.isEmpty()) {
                 if (addArtworkMapper.addCelebrity(celebrity) <= 0) {
                     throw new AddArtworkException(UploadArtworkDto.ADD_CELERITY_ERROR);
                 }
+            }
+            else{
+                celebrity.setCid(celebrityId.get(0));
             }
             if (addArtworkMapper.addCelebrityAndArtworkRelation(
                     artworkId, celebrity.getCid(), celebrity.title) <= 0) {
@@ -134,6 +139,8 @@ public class GetUploadArtworkController {
 
     // 通过aid们找所有的作品
     private List<GetArtworkDto> findByAids(List<Integer> aids){
+        System.out.println("正在通过aid找作品");
+
         List<GetArtworkDto> artworks=new ArrayList<>(0);
         for(Integer aid:aids){
             artworks.addAll(getArtworkMapper.findArtworkByAid(aid));
@@ -141,7 +148,8 @@ public class GetUploadArtworkController {
         for(GetArtworkDto artwork:artworks){
             artwork.userName=getArtworkMapper.findUserNameByAid(artwork.id);
             artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
-            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
+//            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
+            artwork.title="不知道有什么用的";
             artwork.kind=getArtworkMapper.findKindNameByKid(artwork.kid);
         }
         return artworks;
@@ -149,6 +157,8 @@ public class GetUploadArtworkController {
 
     // 通过搜索职工找所有的作品
     private List<GetArtworkDto> findByStaff(String search){
+        System.out.println("正在通过职工找作品");
+
         List<GetArtworkDto> artworks=new ArrayList<>(0);
         List<Integer> celebritiesId = getArtworkMapper.findAllCidLikeSearch(search);
         List<Integer> aids=new ArrayList<>();
@@ -161,6 +171,8 @@ public class GetUploadArtworkController {
 
     // 通过搜索类型的，找这个类型的所有作品
     private List<GetArtworkDto> findByType(String search,String searchType){
+        System.out.println("正在通过类别找作品");
+
         List<GetArtworkDto> artworks=new ArrayList<>(0);
         Integer kid = getArtworkMapper.findKidBySearchType(searchType);
         List<Integer> allArtworkId = getArtworkMapper.findAllArtworkNameLikeSearch(search);
@@ -177,8 +189,11 @@ public class GetUploadArtworkController {
         return artworks;
     }
     private List<GetArtworkDto> findByIp(String search){
+        System.out.println("正在通过ip找作品");
+                
         List<GetArtworkDto> artworks=new ArrayList<>(0);
         List<Integer> ipIds = getArtworkMapper.findIpIdLikeIpName(search);
+
         for(Integer ipId: ipIds){
             artworks.addAll(getArtworkMapper.findAllArtworkByIpId(ipId));
         }
@@ -186,13 +201,16 @@ public class GetUploadArtworkController {
             artwork.kind=getArtworkMapper.findKindNameByKid(artwork.kid);
             artwork.userName=getArtworkMapper.findUserNameByAid(artwork.id);
             artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
-            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
+//            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
+            artwork.title="不知道有什么用的";
         }
         return artworks;
     }
 
     // 通过用户找作品
     private List<GetArtworkDto> findByUser(String search,boolean findOne){
+        System.out.println("正在通过用户找作品");
+
         List<GetArtworkDto> artworks=new ArrayList<>(0);
         List<Integer> uIds;
         if(findOne){
