@@ -1,5 +1,6 @@
 import React from "react";
 import './scroll.css'
+import {useNavigate} from "react-router-dom";
 
 export default function CelebrityImage(props:{
     images:{
@@ -8,6 +9,7 @@ export default function CelebrityImage(props:{
         name:string
     }[],
 }) {
+  const navigate=useNavigate()
   const { images } = props;
   const imageStyle={
       height:168,
@@ -17,9 +19,11 @@ export default function CelebrityImage(props:{
       backgroundColor: 'transparent',
       border:0,
   }
-  const buttonClick=(event:any)=>{
-      //todo
-      // 点击图像和人名的链接逻辑，写一些搜索人员的sql语句
+  const buttonClick=(event:any,image:any)=>{
+      const celebrityName=image.name
+      console.log(celebrityName)
+
+      navigate(`/s/artwork?name=${celebrityName}&category=staff`);
   }
   const buttonOver=(event:any)=>{
       event.target.style.color='red'
@@ -38,13 +42,20 @@ export default function CelebrityImage(props:{
       {images.map((image, index) => (
           <div key={index} style={{marginRight:15}}>
               <img src={image.src} style={imageStyle} alt={"图片加载失败"}
-                  onClick={buttonClick}
+                  onClick={(event)=>{
+                      buttonClick(event,image)
+                  }}
                   title={'点击搜索他的作品'}
-              /> <br/>
+              />
+              <br/>
               <div style={{textAlign:'center'}}>
-                  <button style={buttonStyle} onClick={buttonClick} onMouseOver={buttonOver} onMouseOut={buttonOut}>
+                  <button style={buttonStyle} onMouseOver={buttonOver} onMouseOut={buttonOut}
+                          onClick={(event)=>{
+                              buttonClick(event,image)
+                          }}>
                       {image.name}
-                  </button><br/>
+                  </button>
+                  <br/>
                   <p style={{fontSize:12,fontWeight:100}}>{image.title}</p>
               </div>
           </div>

@@ -18,31 +18,7 @@ const SearchArtworkResult = () => {
     const [artworkDtoList, setArtworkDtoList] = useState<ArtworkDto[]>([])
     //<>是泛型，ArtworkDto是一个泛型参数
 
-    // 这里明显是我在挣扎，不用看
-    // let jsonData = location.state?.data
-    // useEffect(() => {
-    //     try {
-    //       if (jsonData && jsonData.length > 0) {
-    //           console.log('到if里了')
-    //         // const artworkData = jsonData.map((item: ArtworkDto) => ({
-    //         //             id: item.id,
-    //         //             atitle: item.atitle,
-    //         //             title: item.title,
-    //         //             avatar: item.avatar,
-    //         //             intro: item.intro,
-    //         //             ip: item.ip,
-    //         //             kind: item.kind,
-    //         //             resourceAddress: item.resourceAddress,
-    //         //             userName: item.userName
-    //         //      }));
-    //         // console.log(artworkData.length)
-    //         // setArtworkDtoList(artworkData)
-    //       }
-    //     }
-    //     catch (error) {
-    //       console.error('JSON 解析错误:');
-    //     }
-    // }, [jsonData]);
+
 
     //useEffect函数被当作构造函数使用，第一个参数是一个函数，没有参数，第二个参数是一个数组
     useEffect(() => {

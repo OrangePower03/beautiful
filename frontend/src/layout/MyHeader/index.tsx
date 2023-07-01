@@ -4,18 +4,6 @@ import React, {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
-interface ArtworkDto {
-    id: number
-    atitle:string
-    title: string
-    avatar: string
-    intro: string
-    ip: string
-    kind: string
-    resourceAddress:string
-    userName:string
-}
-
 const MyHeader = ()=>{
     const navigate = useNavigate()
     const [artwork,setArtwork]=useState<ArtworkDto[]>()
@@ -59,11 +47,7 @@ const MyHeader = ()=>{
                         axios.get(`/artwork/user?username=${localStorage.getItem('username')}`).
                         then(e=>{
                             setArtwork(e.data)
-                            let objectArray=JSON.stringify(artwork)
-                            // 写一个用户界面，链接在下面了
-                            // navigate(`/s/artwork/user?category=${localStorage.getItem("username")}`,
-                            //     { state: { data: objectArray } });
-
+                            navigate(`/s/artwork?name=${localStorage.getItem('username')}&category=user`);
                         }).catch(error=> {
                                 console.log('获取个人上传失败')
                             }
