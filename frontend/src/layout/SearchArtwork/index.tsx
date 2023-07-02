@@ -39,11 +39,11 @@ const SearchArtwork = () => {
                         ]}/>
                     }
                     onSearch={(e) => {
-                        if(e==='')
-                            alert('请输入您的搜索')
-                        else if(e==='_' || e.includes('%'))
-                            alert('您觉得有这样的电影吗')
-                        else
+                        // if(e==='')
+                        //     alert('请输入您的搜索')
+                        // else if(e==='_' || e.includes('%'))
+                        //     alert('您觉得有这样的电影吗')
+                        // else
                             navigate(`/s/artwork?name=${e}&category=${category}`);
                     }} enterButton/>
 

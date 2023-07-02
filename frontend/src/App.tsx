@@ -15,7 +15,6 @@ import { Header } from 'antd/es/layout/layout';
 import Register from "./layout/Register";
 import EditArtwork from "./layout/EditArtwork";
 import ShowArtwork from "./layout/ShowArtwork";
-import UserArtwork from "./layout/UserArtwork";
 import User from "./layout/User";
 
 //interface——类似于data class
@@ -23,7 +22,7 @@ import User from "./layout/User";
 function App() {
     const router = createBrowserRouter([
         {
-            path:"user",
+            path:"s/artwork/user",
             element: <User/>,
         },
         {
@@ -58,10 +57,6 @@ function App() {
             path: "show/artwork/:aid",
             element: <ShowArtwork/>,
         },
-        {
-            path: "s/artwork/user",
-            element: <UserArtwork/>
-        }
     ]);
     return <div>
         <RouterProvider router={router} />

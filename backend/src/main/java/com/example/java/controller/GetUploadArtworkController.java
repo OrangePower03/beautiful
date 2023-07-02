@@ -42,11 +42,11 @@ public class GetUploadArtworkController {
     public GetArtworkDto[] searchArtworks(@RequestParam("name") String searchName,
                            @RequestParam("category") String searchType){
         System.out.println("searchArtworks开始运行");
-        if(searchName.isEmpty() || searchName.equals("_")){
-            if(searchType.equals(GetArtworkDto.ALL)){
-                throw new ErrorRequest("用户妄想穷尽数据库");
-            }
-        }
+//        if(searchName.isEmpty() || searchName.equals("_")){
+//            if(searchType.equals(GetArtworkDto.ALL)){
+//                throw new ErrorRequest("用户妄想穷尽数据库");
+//            }
+//        }
         Set<GetArtworkDto> artworkSet=new HashSet<>(0);
         List<GetArtworkDto> artworkList=new ArrayList<>(0);
         String search=String.format("%%%s%%",searchName);

@@ -2,7 +2,7 @@ import {AutoComplete, Button, Checkbox, Col, DatePicker, Form, Input, message, R
 import {useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 
-const {Search} = Input;
+// const {Search} = Input;
 import styles from './styles.module.scss'
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 import axios from "axios";
@@ -20,12 +20,22 @@ interface TitleDto {
     name: string
 }
 
+interface Celebrity{
+    name: string
+    avatar: string
+}
+
 const AddArtwork = () => {
     const navigate = useNavigate();
     const [kindList, setKindList] = useState<KindDto[]>([])
     const [titleList, setTitleList] = useState<TitleDto[]>([])
-    const [celebrityList, setCelebrityList] = useState<string[]>([])
+    const [celebrityList, setCelebrityList] = useState<Celebrity[]>([])
     const [ipList, setipList] = useState<string[]>([])
+    const [avatar,setAvatar]=useState('111')
+    const celebrityDataSource=celebrityList.map(e => ({
+            value: e.name,
+            text: e.name,
+        }))
     useEffect(() => {
         axios.get<KindDto[]>('/kind').then(e => {
             setKindList(e.data)
@@ -38,7 +48,7 @@ const AddArtwork = () => {
     }, [])
     useEffect(() => {
         axios.get<string[]>('/celebrity').then(e => {
-            setCelebrityList(e.data)
+            setCelebrityList(e.data as any)
         })
     }, [])
 
@@ -47,6 +57,8 @@ const AddArtwork = () => {
             setipList(e.data)
         })
     }, [])
+
+
 
     return <div>
         <MyHeader/>
@@ -59,9 +71,9 @@ const AddArtwork = () => {
                 // initialValues={{remember: true}}
                 onFinish={(e) => {
                     const data = {...e, date: e.date.unix()}
-                    console.log(e)
+                    // console.log(e)
                     axios.post('/artwork', data,).then(() => {
-                        console.log(data)
+                        // console.log(data)
                         message.success("添加成功！")
                         navigate("/")
                     }).catch(e => {
@@ -158,9 +170,14 @@ const AddArtwork = () => {
                                                     name={[index, 'name']}
                                                     rules={[{required: true, message: 'Missing first name'}]}
                                                 >
-                                                    <AutoComplete dataSource={celebrityList.map(e => ({
-                                                        value: e, text: e
-                                                    }))} placeholder="贡献者"/>
+                                                    <AutoComplete options={celebrityDataSource} placeholder="贡献者"
+                                                         // 妈的，为什么不能选人名进头像
+                                                         onSelect={(value)=>{
+                                                             const celebrity=celebrityList.find(celebrity => celebrity.name === value);
+                                                             if(celebrity!==null) {
+                                                                 // celebrity.avatar 就是对应的url了，想办法弄到屏幕上
+                                                             }
+                                                         }}/>
                                                 </Form.Item>
                                             </Col>
                                             <Col span={4}>
@@ -180,7 +197,7 @@ const AddArtwork = () => {
                                                     name={[index, 'avatar']}
                                                     rules={[{required: true, message: 'Missing avatar'}]}
                                                 >
-                                                    <Input placeholder="头像url"/>
+                                                    <Input  placeholder="头像url"/>
                                                 </Form.Item>
                                             </Col>
                                             <Col span={2}>
