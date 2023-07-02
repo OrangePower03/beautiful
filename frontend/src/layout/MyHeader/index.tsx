@@ -16,6 +16,9 @@ const MyHeader = ()=>{
             items={[
                 {
                     label:localStorage.getItem("username"),
+                    onClick:()=>{
+                        window.location.href = "user"
+                    },
                     key:'-2',
                 },
                 {

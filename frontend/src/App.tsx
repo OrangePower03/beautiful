@@ -16,11 +16,16 @@ import Register from "./layout/Register";
 import EditArtwork from "./layout/EditArtwork";
 import ShowArtwork from "./layout/ShowArtwork";
 import UserArtwork from "./layout/UserArtwork";
+import User from "./layout/User";
 
 //interface——类似于data class
 //类似于c++的struct和class
 function App() {
     const router = createBrowserRouter([
+        {
+            path:"user",
+            element: <User/>,
+        },
         {
             path: "/",
             element: <SearchArtwork/>,
