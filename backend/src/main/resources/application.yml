@@ -13,7 +13,5 @@ spring:
       ddl-auto: update
     open-in-view: false
 
-  # 值得注意，执行到这就不会继续执行下面的命令了
   profiles:
     active: dev
-

@@ -1,5 +1,6 @@
 package com.example.java.controller;
 
+import com.example.java.dto.CelebrityNameAndAvatarDto;
 import com.example.java.dto.KindDto;
 import com.example.java.dto.TitleDto;
 import com.example.java.mapper.AddArtworkMapper;
@@ -39,14 +40,13 @@ public class GetController {
     }
 
     @GetMapping("/celebrity")
-    public String[] getAllCelebrity(){
-        List<String> allCelebrity = addArtworkMapper.findAllCelebrityName();
+    public CelebrityNameAndAvatarDto[] getAllCelebrity(){
+        List<CelebrityNameAndAvatarDto> allCelebrity = addArtworkMapper.findAllCelebrityName();
         if(allCelebrity.isEmpty()){
             System.out.println("celebrity为空");
-            return new String[0];
+            return new CelebrityNameAndAvatarDto[0];
         }
-        String[] temp=new String[allCelebrity.size()];
-        return allCelebrity.toArray(temp);
+        return allCelebrity.toArray(new CelebrityNameAndAvatarDto[0]);
     }
 
     @GetMapping("/title")

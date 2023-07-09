@@ -1,9 +1,6 @@
 package com.example.java.mapper;
 
-import com.example.java.dto.CelebrityDto;
-import com.example.java.dto.KindDto;
-import com.example.java.dto.TitleDto;
-import com.example.java.dto.UploadArtworkDto;
+import com.example.java.dto.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -29,8 +26,8 @@ public interface AddArtworkMapper {
     List<Integer> findIdByIp(String ip);
 
     // 找全部职工(celebrity)，通过职工的名字找id
-    @Select("select name from celebrity")
-    List<String> findAllCelebrityName();
+    @Select("select name,avatar from celebrity")
+    List<CelebrityNameAndAvatarDto> findAllCelebrityName();
     @Select("select cid from celebrity where name=#{name}")
     List<Integer> findCidByCelebrityName(String name);
 
