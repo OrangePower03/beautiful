@@ -7,9 +7,6 @@ import MyTooltip from "../SearchArtwork/MyTooltip";
 
 
 const User = () => {
-
-
-
     return(
         <div>
             <MyHeader/>
