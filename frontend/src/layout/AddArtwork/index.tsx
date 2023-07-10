@@ -116,7 +116,7 @@ const AddArtwork = () => {
                 <Form.Item
                     label="系列"
                     name="ip"
-                    rules={[{required: true}]}
+                    rules={[{required: true,message: '如果不知道ip系列就填写他的名字即可'}]}
                 >
                     <AutoComplete
                         style={{width: 200}}
@@ -170,7 +170,7 @@ const AddArtwork = () => {
                                                     name={[index, 'name']}
                                                     rules={[{required: true, message: 'Missing first name'}]}
                                                 >
-                                                    <AutoComplete options={celebrityDataSource} placeholder="贡献者"
+                                                    <AutoComplete options={celebrityDataSource} placeholder="姓名"
                                                          // 妈的，为什么不能选人名进头像
                                                          onSelect={(value)=>{
                                                              const celebrity=celebrityList.find(celebrity => celebrity.name === value);
