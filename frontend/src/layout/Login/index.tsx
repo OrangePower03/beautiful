@@ -12,7 +12,7 @@ interface LoginDto {
 
 interface LoginResponseDto {
     account: string;
-    randomString: string
+    token: string
     tag: number
     username:string
 }
@@ -51,10 +51,13 @@ const Login = () => {
 
 const loginButtonOnClick=() => {
                         axios.post<LoginResponseDto>('/login', loginDto).then(e => {//loginDto就是把这个变量直接发送到后端了
-                            localStorage.setItem("randomString", e.data.randomString)
-                            localStorage.setItem("tag", e.data.tag.toString())
-                            localStorage.setItem("username",  e.data.username)
-                            localStorage.setItem("account", e.data.account)
+                            localStorage.setItem("token", e.data["token"])
+                            localStorage.setItem("tag", e.data["tag"].toString())
+                            localStorage.setItem("username",  e.data["username"])
+                            localStorage.setItem("account", e.data["account"])
+                            // @ts-ignore
+                            localStorage.setItem("exp", e.data["exp"])
+                            console.log(localStorage.getItem("token"))
                             nav("/")
                         }).catch(e => {
                             let data=e.response.data

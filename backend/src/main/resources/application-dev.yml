@@ -4,3 +4,4 @@ our:
 user:
   image:
     url: backend/src/main/resources/static/userImages
+  tokenExpire: 60*60*1000

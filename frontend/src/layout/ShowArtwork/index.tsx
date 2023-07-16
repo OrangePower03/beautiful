@@ -60,10 +60,15 @@ export default function Show() {
         celebritys:[],
     })
     const [celebrityTitleList, setCelebrityTitleList] = useState<CelebritytitleDto[]>([])
+    const config={
+        headers:{
 
+            token: localStorage.getItem("token")
+        }
+    }
     useEffect(() => {
         //axios.get就是往后端发送一个get请求，请求的url就是你的第一个参数
-        axios.get(`http://localhost:8080/artwork/${aid}`).then(e => {
+        axios.get(`http://localhost:8080/artwork/${aid}`,config).then(e => {
             console.log(e.data)
             setArtworkDtoList(e.data)
             //.then是异步请求的处理部分，就是等后端发来数据以后再做处理的部分
@@ -73,7 +78,7 @@ export default function Show() {
     }, [])
 
     useEffect(() => {
-        axios.get<CelebritytitleDto[]>('/title').then(e => {
+        axios.get<CelebritytitleDto[]>('/title',config).then(e => {
             console.log(e.data)
             setCelebrityTitleList(e.data)
         })

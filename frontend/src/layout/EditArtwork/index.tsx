@@ -46,33 +46,37 @@ const AddArtwork = () => {
     const [celebrityList, setCelebrityList] = useState<string[]>([])
     const {aid} = useParams()
     const [ipList, setipList] = useState<string[]>([])
-
+    const config={
+        headers:{
+            token: localStorage.getItem("token")
+        }
+    }
     useEffect(() => {
-        axios.get<ArtworkEditDto>(`/artwork/edit/${aid}`).then(e => {
+        axios.get<ArtworkEditDto>(`/artwork/edit/${aid}`,config).then(e => {
             setArtworkEditDto({...e.data,time:dayjs.unix(e.data.time as number)})
         })
     }, [])
 
     useEffect(() => {
-        axios.get<KindDto[]>('/kind').then(e => {
+        axios.get<KindDto[]>('/kind',config).then(e => {
             setKindList(e.data)
         })
     }, [])
 
     useEffect(() => {
-        axios.get<TitleDto[]>('/title').then(e => {
+        axios.get<TitleDto[]>('/title',config).then(e => {
             setTitleList(e.data)
         })
     }, [])
 
     useEffect(() => {
-        axios.get<string[]>('/celebrity').then(e => {
+        axios.get<string[]>('/celebrity',config).then(e => {
             setCelebrityList(e.data)
         })
     }, [])
 
     useEffect(() => {
-        axios.get<string[]>('/ip').then(e => {
+        axios.get<string[]>('/ip',config).then(e => {
             setipList(e.data)
         })
     }, [])
@@ -94,9 +98,7 @@ const AddArtwork = () => {
                             time: e.time.unix(),
                         } as ArtworkEditDto
                         console.log(data)
-                        axios.put('/artwork',data).
-                           then(()=>{
-
+                        axios.put('/artwork',data,config).then(()=>{
                             message.success("修改成功！")
                             navigate(-1)
                         }).catch(e=>{

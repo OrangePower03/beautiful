@@ -36,24 +36,29 @@ const AddArtwork = () => {
             value: e.name,
             text: e.name,
         }))
+    const config={
+        headers:{
+            token: localStorage.getItem("token")
+        }
+    }
     useEffect(() => {
-        axios.get<KindDto[]>('/kind').then(e => {
+        axios.get<KindDto[]>('/kind',config).then(e => {
             setKindList(e.data)
         })
     }, [])
     useEffect(() => {
-        axios.get<TitleDto[]>('/title').then(e => {
+        axios.get<TitleDto[]>('/title',config).then(e => {
             setTitleList(e.data)
         })
     }, [])
     useEffect(() => {
-        axios.get<string[]>('/celebrity').then(e => {
+        axios.get<string[]>('/celebrity',config).then(e => {
             setCelebrityList(e.data as any)
         })
     }, [])
 
     useEffect(() => {
-        axios.get<string[]>('/ip').then(e => {
+        axios.get<string[]>('/ip',config).then(e => {
             setipList(e.data)
         })
     }, [])
@@ -72,7 +77,17 @@ const AddArtwork = () => {
                 onFinish={(e) => {
                     const data = {...e, date: e.date.unix()}
                     // console.log(e)
-                    axios.post('/artwork', data,).then(() => {
+                    axios.post('/artwork', data,config)
+                    // axios({
+                    //     method: "post",
+                    //     data: {
+                    //         data: data
+                    //     },
+                    //     headers: {
+                    //         token: localStorage.getItem("token")
+                    //     }
+                    // })
+                        .then(() => {
                         // console.log(data)
                         message.success("添加成功！")
                         navigate("/")

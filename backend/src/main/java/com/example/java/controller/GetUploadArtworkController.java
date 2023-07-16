@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin("http://localhost:5173")
 @RestController
@@ -166,7 +167,7 @@ public class GetUploadArtworkController {
             aids.addAll(getArtworkMapper.findAidByCid(cid));
         }
         artworks=findByAids(aids);
-        return artworks;
+        return new HashSet<>(artworks).stream().toList();
     }
 
     // 通过搜索类型的，找这个类型的所有作品

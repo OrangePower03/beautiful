@@ -24,7 +24,7 @@ const MyHeader = ()=>{
                 {
                     label:'登出',
                     onClick:()=>{
-                      localStorage.removeItem("randomString")
+                      localStorage.removeItem("token")
                       window.location.href = "/login"
                     },
                     key:'-1',

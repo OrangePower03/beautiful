@@ -1,5 +1,6 @@
 package com.example.java.mapper;
 
+import com.example.java.dto.LoginDto;
 import com.example.java.dto.RegisterDto;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -33,4 +34,7 @@ public interface UserMapper {
 
     @Select("select uid from _user where password=#{password}")
     List<Integer> findUidByPassword(@Param("password") String password);
+
+    @Select("select uid,account,password,uid, account, name, password, tag from _user where account=#{account}")
+    LoginDto findUserByAccount(String account);
 }
