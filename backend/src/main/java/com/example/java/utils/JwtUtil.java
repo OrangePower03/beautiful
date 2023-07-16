@@ -15,8 +15,7 @@ public class JwtUtil {
 
     private static final String secret="!DSG@$%^%DSFQ#$^!#$Y";
 
-    @Value("tokenExpire")
-    private static long expireTime = 30*60*1000; //三十分钟过期
+    private static final long expireTime=30*60*1000; //三十分钟过期
 
     private static JWTCreator.Builder builder;
 

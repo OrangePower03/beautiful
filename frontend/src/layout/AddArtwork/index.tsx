@@ -78,17 +78,7 @@ const AddArtwork = () => {
                     const data = {...e, date: e.date.unix()}
                     // console.log(e)
                     axios.post('/artwork', data,config)
-                    // axios({
-                    //     method: "post",
-                    //     data: {
-                    //         data: data
-                    //     },
-                    //     headers: {
-                    //         token: localStorage.getItem("token")
-                    //     }
-                    // })
-                        .then(() => {
-                        // console.log(data)
+                    .then((response) => {
                         message.success("添加成功！")
                         navigate("/")
                     }).catch(e => {

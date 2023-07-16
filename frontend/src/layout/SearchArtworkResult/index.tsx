@@ -29,6 +29,8 @@ const SearchArtworkResult = () => {
         //axios.get就是往后端发送一个get请求，请求的url就是你的第一个参数
         axios.get(`http://localhost:8080/artwork?name=${searchParams.get("name")}&category=${searchParams.get("category")}`, config).
         then(e => {
+            // @ts-ignore
+            console.log('新令牌'+e.headers["token"]);
             setArtworkDtoList(e.data)//.then是异步请求的处理部分，就是等后端发来数据以后再做处理的部分，e.data返回的是一个哈希表数组2333，因为有可能返回多个结果
             //如果想要append要先创建一个变量，加完以后再全部赋值进去
         }).catch(error=>{

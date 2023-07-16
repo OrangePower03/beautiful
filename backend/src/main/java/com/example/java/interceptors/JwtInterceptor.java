@@ -13,12 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.net.URI;
 import java.util.Objects;
 
-@CrossOrigin("http://localhost:5173")
 public class JwtInterceptor implements HandlerInterceptor {
+    private String token;
     @Override
     public boolean preHandle(HttpServletRequest request,
                  HttpServletResponse response, Object handler) throws Exception {
@@ -30,9 +31,9 @@ public class JwtInterceptor implements HandlerInterceptor {
         * 不是则验证token，是则放行
         */
         if (!request.getMethod().equals("OPTIONS")) {
+            response.setHeader("token", JwtUtil.build().getToken());
             ProblemDetail detail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
-
-            String token = request.getHeader("token");
+            token = request.getHeader("token");
 
             System.out.println("令牌：" + token);
             if (Objects.isNull(token)) {
@@ -64,7 +65,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             System.out.println("json数据：" + json);
             return false;
         }
-        else{
+        else {
             return true;
         }
     }
