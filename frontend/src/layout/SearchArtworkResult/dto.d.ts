@@ -1,7 +1,7 @@
 interface ArtworkDto {
     id: number
     atitle:string
-    title: string
+    // title: string
     avatar: string
     intro: string
     ip: string

@@ -1,9 +1,11 @@
 package com.example.java.exceptionController;
 
+import com.example.java.controller.UserController;
 import com.example.java.dto.LoginDto;
 import com.example.java.dto.RegisterDto;
 import com.example.java.myExcetion.LoginException;
 import com.example.java.myExcetion.RegisterException;
+import com.example.java.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -15,7 +17,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.net.URI;
 import java.util.List;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackageClasses = {
+        UserController.class, UserDetailsServiceImpl.class})
 public class HandleUserException {
     @Value("${our.email}")
     private String email;

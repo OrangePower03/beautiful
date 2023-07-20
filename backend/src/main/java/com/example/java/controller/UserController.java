@@ -3,12 +3,16 @@ package com.example.java.controller;
 import com.example.java.dto.LoginDto;
 import com.example.java.dto.RegisterDto;
 import com.example.java.mapper.UserMapper;
-import com.example.java.myExcetion.LoginException;
 import com.example.java.myExcetion.RegisterException;
 import com.example.java.utils.JwtUtil;
+import com.example.java.utils.Redis.StringRedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 @CrossOrigin("http://localhost:5173")
@@ -24,8 +29,17 @@ import java.util.*;
 public class UserController {
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager manager;
+
+    @Autowired
+    private StringRedisUtil redisUtil;
     
-    @PostMapping("/register")
+    @PostMapping("/user/register")
     public ResponseEntity<Map<String,String>> register(@Validated @RequestBody
                                  RegisterDto register, BindingResult check){
         if(!register.password.equals(register.confirmedPassword)){
@@ -40,6 +54,8 @@ public class UserController {
         if(!userMapper.findByAccount(register.account).isEmpty()){
             throw new RegisterException(RegisterDto.ACCOUNT_REPEAT);
         }
+        // 密码密文存储
+        register.password=passwordEncoder.encode(register.password);
         int success=userMapper.addUser(register);
         if(success>0){
             Map<String,String> map=new HashMap<>();
@@ -52,45 +68,40 @@ public class UserController {
         }
     }
 
-     @PostMapping("/login")
+     @PostMapping("/user/login")
      public ResponseEntity<Map<String,String>> login(@RequestBody LoginDto login) {
          Map<String,String> map=new HashMap<>();
-         LoginDto user = userMapper.findUserByAccount(login.account);
+//         LoginDto user = userMapper.findUserByAccount(login.account);
+         UsernamePasswordAuthenticationToken authenticationToken=new
+                UsernamePasswordAuthenticationToken(login.account,login.getPassword());
+         Authentication authenticate = manager.authenticate(authenticationToken);
+         LoginDto user=(LoginDto)authenticate.getPrincipal();
 
-         if(Objects.isNull(user)){
-             throw new LoginException(LoginDto.ACCOUNT_EMPTY);
-         }
-         else if(!login.password.equals(user.password)){
-             throw new LoginException(LoginDto.PASSWORD_ERROR);
-         }
-         else {
-             System.out.println(user);
-             String token=JwtUtil.build().getToken();
-             map.put("token",token);
-             map.put("userId",user.uid.toString());
+//         if(Objects.isNull(user)){
+//             throw new LoginException(LoginDto.ACCOUNT_EMPTY);
+//         }
+//         else if(!login.getPassword().equals(user.getPassword())){
+//             throw new LoginException(LoginDto.PASSWORD_ERROR);
+//         }
+//         else {
+             String userId=user.uid.toString();
+
+             map.put("id",userId);
              map.put("account",user.account);
              map.put("username",user.name);
              map.put("tag",user.getTag().toString());
+
+             String token=JwtUtil.build(map).getToken();
+
+             map.put("token",token);
+
              Date expireTime=JwtUtil.verify(token).getExpiresAt();
              long minute=(expireTime.getTime()-System.currentTimeMillis())/60000;
              map.put("exp", minute +"分钟");
-             return new ResponseEntity<>(map,HttpStatus.OK);
-         }
 
-//         if(userMapper.findUidByAccount(login.account).isEmpty()){
-//            throw new LoginException(LoginDto.ACCOUNT_EMPTY);
-//        }
-//        if(userMapper.findUidByPassword(login.password).isEmpty()){
-//            throw new LoginException(LoginDto.PASSWORD_ERROR);
-//        }
-//
-//
-//
-//
-//        login.username=userMapper.findUserNameByAccount(login.account).get(0);
-//        login.setTag(userMapper.findTagByAccount(login.account));
-//        login.setToken(JwtUtil.build().getToken());
-//        System.out.println(login);
-//        return new ResponseEntity<>(map,HttpStatus.OK);
+             redisUtil.set("user:"+userId,user);
+             redisUtil.expire("user:"+userId,minute, TimeUnit.MINUTES);
+             return new ResponseEntity<>(map,HttpStatus.OK);
+//         }
      }
 }

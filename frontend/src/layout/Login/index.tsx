@@ -50,7 +50,7 @@ const Login = () => {
 
 
 const loginButtonOnClick=() => {
-                        axios.post<LoginResponseDto>('/login', loginDto).then(e => {//loginDto就是把这个变量直接发送到后端了
+                        axios.post<LoginResponseDto>('/user/login', loginDto).then(e => {//loginDto就是把这个变量直接发送到后端了
                             localStorage.setItem("token", e.data["token"])
                             localStorage.setItem("tag", e.data["tag"].toString())
                             localStorage.setItem("username",  e.data["username"])

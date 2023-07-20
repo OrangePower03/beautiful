@@ -137,7 +137,8 @@ public class GetUploadArtworkController {
             }
         }
     }
-
+    
+/*---------------------------------method-----------------------------------*/
     // 通过aid们找所有的作品
     private List<GetArtworkDto> findByAids(List<Integer> aids){
         System.out.println("正在通过aid找作品");
@@ -150,7 +151,7 @@ public class GetUploadArtworkController {
             artwork.userName=getArtworkMapper.findUserNameByAid(artwork.id);
             artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
 //            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
-            artwork.title="不知道有什么用的";
+//            artwork.title="不知道有什么用的";
             artwork.kind=getArtworkMapper.findKindNameByKid(artwork.kid);
         }
         return artworks;
@@ -180,11 +181,12 @@ public class GetUploadArtworkController {
         for(Integer aid:allArtworkId){
             artworks.addAll(getArtworkMapper.findArtworkByA_Kid(aid,kid)) ;
         }
-
+        System.out.println(artworks);
         for(GetArtworkDto artwork:artworks){
             artwork.userName=getArtworkMapper.findUserNameByAid(artwork.id);
             artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
-            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
+//            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
+            System.out.println("findTitleNameByAid");
             artwork.kind=searchType;
         }
         return artworks;
@@ -203,7 +205,7 @@ public class GetUploadArtworkController {
             artwork.userName=getArtworkMapper.findUserNameByAid(artwork.id);
             artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
 //            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
-            artwork.title="不知道有什么用的";
+//            artwork.title="不知道有什么用的";
         }
         return artworks;
     }

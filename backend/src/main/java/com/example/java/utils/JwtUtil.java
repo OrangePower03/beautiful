@@ -15,16 +15,17 @@ public class JwtUtil {
 
     private static final String secret="!DSG@$%^%DSFQ#$^!#$Y";
 
-    private static final long expireTime=30*60*1000; //三十分钟过期
+    private static final long expireTime=60*60*1000; //十分钟过期
 
     private static JWTCreator.Builder builder;
 
     private static DecodedJWT decoded;
 
+    private static JwtUtil jwt=new JwtUtil();
+
     private JwtUtil(){}
 
     public static JwtUtil build(Map<String,Object> header, Map<String,String> claim){
-        JwtUtil jwt = new JwtUtil();
         builder = JWT.create();
         builder.withHeader(header);
         claim.forEach(builder::withClaim);
@@ -34,7 +35,6 @@ public class JwtUtil {
     }
 
     public static JwtUtil build(Map<String,String> claim){
-        JwtUtil jwt = new JwtUtil();
         builder = JWT.create();
         claim.forEach(builder::withClaim);
         long nowTime=System.currentTimeMillis();
@@ -64,13 +64,9 @@ public class JwtUtil {
         return builder.sign(Algorithm.HMAC256(secret));
     }
 
-    public static DecodedJWT verify(String token){
+    public static JwtUtil verify(String token){
         decoded=JWT.require(Algorithm.HMAC256(secret)).build().verify(token);
-        return decoded;
-    }
-
-    public Date getExpire(){
-        return decoded.getExpiresAt();
+        return jwt;
     }
 
     public String getClaim(String name){
@@ -83,5 +79,9 @@ public class JwtUtil {
             result.put(key,value.asString());
         });
         return result;
+    }
+
+    public Date getExpiresAt() {
+        return decoded.getExpiresAt();
     }
 }

@@ -66,7 +66,7 @@ const SearchArtworkResult = () => {
         {/*将artworkDtoList的每一个值都拿出来映射成一个Card*/}
         {artworkDtoList.map(e => <Card
             style={{margin: '5px'}}
-            title={e.title}
+            // title={e.title}
             extra={
                 localStorage.getItem("tag") === '1' ?
                      <div style={{textAlign:"right"}}>
@@ -112,13 +112,19 @@ const SearchArtworkResult = () => {
             </Row>
             <div>
                 <Space>
-                    <Button size='small' onClick={() => nav(`/s/artwork/?name=${e.ip}&category=ip`)}>{e.ip}</Button>
+                    <Button size='small' onClick={() => nav(`/s/artwork/?name=${e.ip}&category=ip`)}>
+                        {e.ip}
+                    </Button>
+
                     <Button size='small' onClick={() =>
-                        nav(`/s/artwork/?name=&category=${e.kind}`)}
-                    >{e.kind}</Button>
-                    {/*<Button size='small'>{e.kind}</Button>*/}
-                    <Button size='small' onClick={() => nav(`/show/artwork/${e.id}`)}>作品详情</Button>
-                    {/*标记点1，这里是这个新增的按钮的有关代码*/}
+                        nav(`/s/artwork/?name=&category=${e.kind}`)}>
+                            {e.kind}
+                    </Button>
+
+                    <Button size='small' onClick={() => nav(`/show/artwork/${e.id}`)}>
+                        作品详情
+                    </Button>
+
                     <Button size='small' onClick={()=>nav(`/s/artwork?name=${e.userName}&category=user`)}>
                         上传者：{e.userName}
                     </Button>

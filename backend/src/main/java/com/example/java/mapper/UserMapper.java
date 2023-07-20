@@ -35,6 +35,9 @@ public interface UserMapper {
     @Select("select uid from _user where password=#{password}")
     List<Integer> findUidByPassword(@Param("password") String password);
 
-    @Select("select uid,account,password,uid, account, name, password, tag from _user where account=#{account}")
+    @Select("select uid,account,password, name, tag from _user where account=#{account}")
     LoginDto findUserByAccount(String account);
+
+    @Select("select uid,account,password, name, tag from _user where account=#{username}")
+    LoginDto findUserByUsername(String username);
 }

@@ -13,11 +13,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new JwtInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login","/register");
+                .excludePathPatterns("/user/**");
 
-        registry.addInterceptor(new ReFlushTokenInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns("/ip","/kind","celebrity","title")
-                .excludePathPatterns("/login","/register");
+//        registry.addInterceptor(new ReFlushTokenInterceptor())
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/ip","/kind","celebrity","title")
+//                .excludePathPatterns("/user/**");
     }
 }

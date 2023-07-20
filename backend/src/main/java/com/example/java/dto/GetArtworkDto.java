@@ -13,7 +13,7 @@ public class GetArtworkDto {
 
     public Integer id;
     public String atitle;
-    public String title;
+//    public String title;
     public String avatar;
     public String intro;
     public String ip;
@@ -63,7 +63,7 @@ public class GetArtworkDto {
         return "GetArtworkDto{" +
                 "id=" + id +
                 ", atitle='" + atitle + '\'' +
-                ", title='" + title + '\'' +
+//                ", title='" + title + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", intro='" + intro + '\'' +
                 ", ip='" + ip + '\'' +

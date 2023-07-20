@@ -6,7 +6,6 @@ import './index.scss'
 
 //如果在axios里面不写前面的http则会自动加上
 axios.defaults.baseURL = "http://localhost:8080"
-axios.defaults.headers['token']=localStorage.getItem("token")
 
 console.log(window.location.href)
 if (localStorage.getItem("token") === null && !window.location.href.endsWith('/login')) {

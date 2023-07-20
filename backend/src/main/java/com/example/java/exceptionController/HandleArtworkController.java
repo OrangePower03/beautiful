@@ -1,5 +1,7 @@
 package com.example.java.exceptionController;
 
+import com.example.java.controller.EditArtworkController;
+import com.example.java.controller.GetUploadArtworkController;
 import com.example.java.dto.UploadArtworkDto;
 import com.example.java.myExcetion.AddArtworkException;
 import com.example.java.myExcetion.ErrorRequest;
@@ -13,7 +15,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.net.URI;
 import java.util.List;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackageClasses = {
+        GetUploadArtworkController.class, EditArtworkController.class})
 public class HandleArtworkController {
     @Value("${our.email}")
     private String email;

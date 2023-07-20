@@ -39,7 +39,7 @@ const Register = () => {
                             else if(registerDto.account==='')
                                 alert("用户名为空")
                             else {
-                                axios.post('/register',registerDto).then(
+                                axios.post('/user/register',registerDto).then(
                                     e => {//loginDto就是把这个变量直接发送到后端了
                                         console.log(e.data)
                                         console.log('账号'+e.data["account"])

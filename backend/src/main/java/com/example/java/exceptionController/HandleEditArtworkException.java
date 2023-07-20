@@ -1,6 +1,6 @@
 package com.example.java.exceptionController;
 
-import com.example.java.dto.EditArtworkDto;
+import com.example.java.controller.EditArtworkController;
 import com.example.java.myExcetion.AddArtworkException;
 import com.example.java.myExcetion.EditArtworkException;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.net.URI;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackageClasses = {EditArtworkController.class})
 public class HandleEditArtworkException {
     @Value("${our.email}")
     private String email;
