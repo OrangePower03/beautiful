@@ -15,7 +15,7 @@ public class JwtUtil {
 
     private static final String secret="!DSG@$%^%DSFQ#$^!#$Y";
 
-    private static final long expireTime=60*60*1000; //十分钟过期
+    private static final long expireTime=24*60*60*1000; //一天过期
 
     private static JWTCreator.Builder builder;
 

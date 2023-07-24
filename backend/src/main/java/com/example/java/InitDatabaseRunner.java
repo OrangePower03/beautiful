@@ -9,15 +9,29 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class InitDatabaseRunner implements ApplicationRunner {
-
-
     @Autowired
     private InitialDataMapper init;
 
 	@Transactional
     @Override
-    public void run(ApplicationArguments args) throws Exception {
-        if(init.findKindNumber()<=0){
+    public void run(ApplicationArguments args) {
+		// 打开redis服务器
+		String url=this.getClass().getResource("").getPath();
+		System.out.println(url);
+		int uri="target/classes/com/example/java/".length();
+		String serverUri="redis-5.0.14.1/redis-server.exe";
+		String redisUrl=url.substring(1,url.length()-uri)+serverUri;
+		System.out.println(redisUrl);
+		final Runtime runtime = Runtime.getRuntime();
+		Process process = null;
+		try {
+			process = runtime.exec(redisUrl);
+			System.out.println("redis服务器启动成功");
+		} catch (final Exception e) {
+			System.out.println("redis服务器启动失败，你自己重新开启吧");
+		}
+
+		if(init.findKindNumber()<=0){
 			String[] title=new String[]{
 			"配音演员","艺术","演员","导演","剪辑","制片","录音","视效","编剧"
 			};
