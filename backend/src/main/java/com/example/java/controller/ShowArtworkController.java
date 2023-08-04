@@ -44,7 +44,6 @@ public class ShowArtworkController {
             show.celebritys[i].title=celebrityList.get(i).title;
         }
 
-        System.out.println(show);
         return show;
     }
 }

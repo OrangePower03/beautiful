@@ -10,12 +10,15 @@ import com.example.java.mapper.ShowArtworkMapper;
 import com.example.java.myExcetion.AddArtworkException;
 import com.example.java.myExcetion.EditArtworkException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @CrossOrigin("http://localhost:5173")
 @RestController
@@ -35,20 +38,17 @@ public class EditArtworkController {
     private EditArtworkDto findArtworkByAid(Integer aid){
         System.out.println("开始搜索作品");
         EditArtworkDto artwork = editArtworkMapper.findArtworkByAid(aid);
-//        System.out.println("找到这个作品了");
         artwork.time=artwork.date.getTime()/1000;
         artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
-//        System.out.println("找到这个ip了");
         List<Integer> cids=editArtworkMapper.findCidByAid(aid);
 
         for(Integer cid:cids){
             artwork.celebritys.add(showArtworkMapper.findMainMessageByCid(cid));
-//            System.out.println("找到这个职工了");
         }
 
         // 通过cid和aid找这个作品的职工，但是存在一个人多个职位的
         Set<Integer> handleCid=new TreeSet<>();
-//
+
         for(int i=0;i<artwork.celebritys.size();i++){
             if(!handleCid.contains(artwork.celebritys.get(i).getCid())){
                 List<Integer> tids = editArtworkMapper.findTidByCidAndAid(aid, artwork.celebritys.get(i).getCid());
@@ -73,6 +73,7 @@ public class EditArtworkController {
     }
 
     @Transactional
+    @PreAuthorize("@MA.hasAuthority('管理员','超级管理员')")
     @PutMapping("/artwork")
     public void editArtwork(@Validated @RequestBody EditArtworkDto data,
                             BindingResult check){
@@ -161,19 +162,20 @@ public class EditArtworkController {
         }
 
         // 取作品的新老职工集合
-        HashSet<CelebrityDto> newCelebritySet=new HashSet<>(0);
-        HashSet<CelebrityDto> oldCelebritySet=new HashSet<>(0);
-        newCelebritySet.addAll(data.celebritys);
-        oldCelebritySet.addAll(artwork.celebritys);
+        HashSet<CelebrityDto> newCelebritySet=new HashSet<>(data.celebritys);
+        HashSet<CelebrityDto> oldCelebritySet=new HashSet<>(artwork.celebritys);
 
+        Set<CelebrityDto> newAddCelebrities = newCelebritySet.stream()
+                .filter(celebrityDto -> !oldCelebritySet.contains(celebrityDto))
+                .collect(Collectors.toSet());
         // 浅拷贝一个集合
-        HashSet<CelebrityDto> cloneSet=new HashSet<>();
-        cloneSet=(HashSet<CelebrityDto>) newCelebritySet.clone();
-        cloneSet.removeAll(oldCelebritySet);
+//        HashSet<CelebrityDto> cloneSet=new HashSet<>();
+//        cloneSet=(HashSet<CelebrityDto>) newCelebritySet.clone();
+//        cloneSet.removeAll(oldCelebritySet);
 
         // 加上职工和作品的关系
-        for(var newAddCelebrity:cloneSet){
-            System.out.println("新加的职工："+cloneSet);
+        for(var newAddCelebrity:newAddCelebrities){
+            System.out.println("新加的职工："+newAddCelebrities);
 
             if (addArtworkMapper.addCelebrity(newAddCelebrity) <= 0) {
                 throw new AddArtworkException(UploadArtworkDto.ADD_CELERITY_ERROR);

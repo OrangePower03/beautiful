@@ -57,7 +57,6 @@ const loginButtonOnClick=() => {
                             localStorage.setItem("account", e.data["account"])
                             // @ts-ignore
                             localStorage.setItem("exp", e.data["exp"])
-                            console.log(localStorage.getItem("token"))
                             nav("/")
                         }).catch(e => {
                             let data=e.response.data

@@ -14,4 +14,10 @@ public interface InitialDataMapper {
 
     @Select("select count(kid) from kind")
     int findKindNumber();
+
+    @Insert("insert into role(rid,name) values(#{rid},#{roleName})")
+    int addRole(int rid,String roleName);
+
+    @Select("select count(rid) from role")
+    int findCount();
 }

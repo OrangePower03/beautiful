@@ -17,11 +17,10 @@ public class InitDatabaseRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) {
 		// 打开redis服务器
 		String url=this.getClass().getResource("").getPath();
-		System.out.println(url);
 		int uri="target/classes/com/example/java/".length();
 		String serverUri="redis-5.0.14.1/redis-server.exe";
 		String redisUrl=url.substring(1,url.length()-uri)+serverUri;
-		System.out.println(redisUrl);
+//		System.out.println(redisUrl);
 		final Runtime runtime = Runtime.getRuntime();
 		Process process = null;
 		try {
@@ -29,6 +28,13 @@ public class InitDatabaseRunner implements ApplicationRunner {
 			System.out.println("redis服务器启动成功");
 		} catch (final Exception e) {
 			System.out.println("redis服务器启动失败，你自己重新开启吧");
+		}
+
+		if(init.findCount()<=0){
+			int index=0;
+			init.addRole(index++,"普通用户");
+			init.addRole(index++,"管理员");
+			init.addRole(index,"超级管理员");
 		}
 
 		if(init.findKindNumber()<=0){

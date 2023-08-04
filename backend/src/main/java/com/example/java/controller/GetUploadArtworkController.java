@@ -29,13 +29,12 @@ public class GetUploadArtworkController {
     @Autowired
     private UserMapper userMapper;
 
-    //等待前端
+    //等待前端增加页面
     @GetMapping("/artwork/user")
     public GetArtworkDto[] searchMyArtwork(@RequestParam("username") String name){
         System.out.println("searchMyArtwork开始运行");
         List<GetArtworkDto> artworkList = findByUser(name,true);
         GetArtworkDto[] artworks=new GetArtworkDto[artworkList.size()];
-        System.out.println(artworkList.size());
         return artworkList.toArray(artworks);
     }
 
@@ -53,7 +52,6 @@ public class GetUploadArtworkController {
         String search=String.format("%%%s%%",searchName);
         switch (searchType) {
             case GetArtworkDto.ALL -> {
-//                System.out.println("这波是在全局搜索，搜索的内容是：" + search);
                 artworkList.addAll(findByStaff(search));
                 List<Integer> aids = getArtworkMapper.findAidLikeArtworkName(search);
                 artworkSet.addAll(findByAids(aids));
@@ -62,15 +60,12 @@ public class GetUploadArtworkController {
                 artworkList=artworkSet.stream().toList();
             }
             case GetArtworkDto.STAFF -> {
-//                System.out.println("这波是按职工名字搜索，职工名是：" + searchName);
                 artworkList = findByStaff(search);
             }
             case GetArtworkDto.IP -> {
-//                System.out.println("通过ip来找作品，ip的名字是：" + searchName);
                 artworkList = findByIp(search);
             }
             case GetArtworkDto.USER -> {
-//                System.out.println("通过用户找作品，用户名是：" + searchName);
                 artworkList = findByUser(search,false);
             }
             default -> {  // 类型查找
@@ -79,8 +74,7 @@ public class GetUploadArtworkController {
             }
         }
 
-        GetArtworkDto[] temp=new GetArtworkDto[artworkList.size()];
-        return artworkList.toArray(temp);
+        return artworkList.toArray(new GetArtworkDto[artworkList.size()]);
     }
 
     @Transactional
@@ -94,7 +88,7 @@ public class GetUploadArtworkController {
             throw new AddArtworkException(UploadArtworkDto.INPUT_ERROR,check);
         }
         
-        System.out.println("现在在添加ip");
+//        System.out.println("现在在添加ip");
         // 判定用户提交的ip是否存在，不存在就add，存下postIp以后给添加作品准备
         List<Integer> postIp= addArtworkMapper.findIdByIp(upload.ip);
         if (postIp.isEmpty()) {
@@ -104,7 +98,7 @@ public class GetUploadArtworkController {
         }
         upload.ipId= addArtworkMapper.findIdByIp(upload.ip).get(0);
 
-        System.out.println("添加作品");
+//        System.out.println("添加作品");
         // 添加作品，并获取作品的id，给添加作品和职工的关系准备
         if(addArtworkMapper.addArtwork(upload)<=0){
             throw new AddArtworkException(UploadArtworkDto.ADD_ARTWORK_ERROR);
@@ -117,7 +111,7 @@ public class GetUploadArtworkController {
             throw new AddArtworkException(UploadArtworkDto.ADD_AU_RELATION_ERROR);
         }
 
-        System.out.println("添加职工");
+//        System.out.println("添加职工");
         // 添加新职工，并添加职工与作品的关系
         List<CelebrityDto> celebrities = upload.celebrities;
         for (int i=0;i<celebrities.size();i++) {
@@ -138,7 +132,7 @@ public class GetUploadArtworkController {
         }
     }
     
-/*---------------------------------method-----------------------------------*/
+/*---------------------------------methods-----------------------------------*/
     // 通过aid们找所有的作品
     private List<GetArtworkDto> findByAids(List<Integer> aids){
         System.out.println("正在通过aid找作品");
@@ -168,7 +162,7 @@ public class GetUploadArtworkController {
             aids.addAll(getArtworkMapper.findAidByCid(cid));
         }
         artworks=findByAids(aids);
-        return new HashSet<>(artworks).stream().toList();
+        return artworks.stream().distinct().toList();
     }
 
     // 通过搜索类型的，找这个类型的所有作品
@@ -186,7 +180,6 @@ public class GetUploadArtworkController {
             artwork.userName=getArtworkMapper.findUserNameByAid(artwork.id);
             artwork.ip=getArtworkMapper.findIpNameByIpid(artwork.ipId);
 //            artwork.title=getArtworkMapper.findTitleNameByAid(artwork.id);
-            System.out.println("findTitleNameByAid");
             artwork.kind=searchType;
         }
         return artworks;

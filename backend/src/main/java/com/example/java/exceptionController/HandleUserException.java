@@ -3,6 +3,7 @@ package com.example.java.exceptionController;
 import com.example.java.controller.UserController;
 import com.example.java.dto.LoginDto;
 import com.example.java.dto.RegisterDto;
+import com.example.java.filter.JwtTokenFilter;
 import com.example.java.myExcetion.LoginException;
 import com.example.java.myExcetion.RegisterException;
 import com.example.java.security.UserDetailsServiceImpl;
@@ -18,7 +19,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestControllerAdvice(basePackageClasses = {
-        UserController.class, UserDetailsServiceImpl.class})
+        UserController.class, UserDetailsServiceImpl.class, JwtTokenFilter.class})
 public class HandleUserException {
     @Value("${our.email}")
     private String email;
@@ -76,11 +77,20 @@ public class HandleUserException {
             detail.setTitle(LoginDto.PASSWORD_ERROR);
             detail.setDetail("您所填写的密码错误，请您仔细核对");
         }
+        else if(message.equals(LoginDto.TOKEN_UNAUTHORIZED)){
+            detail.setTitle(LoginDto.TOKEN_UNAUTHORIZED);
+            detail.setDetail("""
+                    您的信息可能被篡改，未免服务端被攻击，已经对您的请求设下拦截
+                    请您联系我们的邮箱"""+this.email);
+        }
+        else if(message.equals(LoginDto.UNVERIFIED)){
+            detail.setTitle(LoginDto.UNVERIFIED);
+            detail.setDetail("您未认证或者您的认证过期，请您重新登陆");
+        }
         else {
             detail.setTitle("未知错误");
             detail.setDetail("发生未知错误，请联系我们"+this.email);
         }
-        detail.setInstance(URI.create("/login"));
         return detail;
     }
 }

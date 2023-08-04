@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -84,24 +85,42 @@ public class UserController {
 //             throw new LoginException(LoginDto.PASSWORD_ERROR);
 //         }
 //         else {
-             String userId=user.uid.toString();
+         String userId=user.uid.toString();
 
-             map.put("id",userId);
-             map.put("account",user.account);
-             map.put("username",user.name);
-             map.put("tag",user.getTag().toString());
+         map.put("id",userId);
+         map.put("account",user.account);
+         map.put("username",user.name);
+         map.put("tag",user.getTag().toString());
 
-             String token=JwtUtil.build(map).getToken();
+         String token=JwtUtil.build(map).getToken();
 
-             map.put("token",token);
+         map.put("token",token);
 
-             Date expireTime=JwtUtil.verify(token).getExpiresAt();
-             long minute=(expireTime.getTime()-System.currentTimeMillis())/60000;
-             map.put("exp", minute +"分钟");
+         Date expireTime=JwtUtil.verify(token).getExpiresAt();
+         long minute=(expireTime.getTime()-System.currentTimeMillis())/60000;
+         map.put("exp", minute +"分钟");
 
-             redisUtil.set("user:"+userId,user);
-             redisUtil.expire("user:"+userId,minute, TimeUnit.MINUTES);
-             return new ResponseEntity<>(map,HttpStatus.OK);
+         redisUtil.set("user:"+userId,user);
+
+         redisUtil.expire("user:"+userId,minute, TimeUnit.MINUTES);
+         return new ResponseEntity<>(map,HttpStatus.OK);
 //         }
+     }
+
+    @PostMapping("/user/logout")
+    public void logout(){
+        System.out.println("用户正在退出登录");
+        UsernamePasswordAuthenticationToken authentication =
+        (UsernamePasswordAuthenticationToken)
+                SecurityContextHolder.getContext().getAuthentication();
+
+        LoginDto user = (LoginDto)authentication.getPrincipal();
+        try {
+            System.out.println("用户id："+user.uid);
+            redisUtil.delete("user:"+user.uid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("验证失败");
+        }
      }
 }

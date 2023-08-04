@@ -1,5 +1,6 @@
 package com.example.java.myExcetion;
 
+import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.BindingResult;
 
 public class RegisterException extends RuntimeException {
@@ -9,10 +10,10 @@ public class RegisterException extends RuntimeException {
         return check;
     }
 
-    public RegisterException(String message){
+    public RegisterException(@NotNull String message){
         super(message);
     }
-    public RegisterException(String message,BindingResult check){
+    public RegisterException(@NotNull String message,BindingResult check){
         super(message);
         this.check=check;
     }

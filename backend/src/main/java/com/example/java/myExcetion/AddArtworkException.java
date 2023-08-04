@@ -1,6 +1,7 @@
 package com.example.java.myExcetion;
 
 
+import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.BindingResult;
 
 public class AddArtworkException extends RuntimeException{
@@ -10,11 +11,11 @@ public class AddArtworkException extends RuntimeException{
         return check;
     }
 
-    public AddArtworkException(String message){
+    public AddArtworkException(@NotNull String message){
         super(message);
     }
 
-    public AddArtworkException(String message, BindingResult check){
+    public AddArtworkException(@NotNull String message, BindingResult check){
         super(message);
         this.check=check;
     }

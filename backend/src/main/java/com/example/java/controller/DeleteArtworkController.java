@@ -2,6 +2,7 @@ package com.example.java.controller;
 
 import com.example.java.mapper.DeleteArtworkMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ public class DeleteArtworkController {
     private DeleteArtworkMapper deleteArtworkMapper;
 
     @DeleteMapping("/artwork/{id}")
+    @PreAuthorize("@MA.hasAuthority('管理员','超级管理员')")
     @Transactional
     public void deleteArtwork(@PathVariable Integer id){
         System.out.println("deleteArtwork开始运行");

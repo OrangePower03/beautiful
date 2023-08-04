@@ -1,10 +1,10 @@
 package com.example.java.filter;
 
 import com.example.java.dto.LoginDto;
+import com.example.java.myExcetion.LoginException;
 import com.example.java.utils.Redis.StringRedisUtil;
 import com.example.java.utils.JwtUtil;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
+import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Objects;
+
 
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
@@ -38,13 +39,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             userId = JwtUtil.verify(token).getClaim("id");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("token非法");
+            throw new LoginException(LoginDto.TOKEN_UNAUTHORIZED);
         }
         String redisKey = "user:" + userId;
         LoginDto login = (LoginDto)redisUtil.get(redisKey);
         System.out.println("用户信息:"+login);
         if(Objects.isNull(login)){
-            throw new RuntimeException("用户未登录");
+            throw new LoginException(LoginDto.UNVERIFIED);
         }
 
         // 存入安全上下文
@@ -53,7 +54,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                         login,null,login.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
+        System.out.println("认证完毕");
         filterChain.doFilter(request,response);
     }
 }
